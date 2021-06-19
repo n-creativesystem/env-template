@@ -1,0 +1,16 @@
+name: "variable template action ncs"
+description: "テンプレートエンジンを使用して環境変数の値を代入します/Use the template engine to assign the values ​​of environment variables"
+author: "nozomi_nishinohara@n-creativesystem.com"
+inputs:
+  input:
+    description: "テンプレートファイル名"
+    required: true
+  output:
+    description: "出力ファイル名"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  color: blue
+  icon: anchor

@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  variable-template-dev:
+    build: .devcontainer
+    tty: true
+    volumes:
+      - ./:/src/:delegated
+      - ~/.ssh:/root/.ssh
+      - ~/.gitconfig:/root/.gitconfig
+    container_name: variable-template-dev

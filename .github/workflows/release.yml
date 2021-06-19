@@ -1,0 +1,39 @@
+name: Build and Deploy to IKS
+
+on:
+  push:
+    tags:
+      - "*"
+
+env:
+  REGISTRY_HOSTNAME: ghcr.io
+  REPOSITORY_NAMESPACE: n-creativesystem
+  IMAGE_NAME: variable-template
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: version
+        id: version
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Build with Docker
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          docker build -t "$REGISTRY_HOSTNAME"/"$REPOSITORY_NAMESPACE"/"$IMAGE_NAME":"$VERSION" .
+          docker tag "$REGISTRY_HOSTNAME"/"$REPOSITORY_NAMESPACE"/"$IMAGE_NAME":"$VERSION" "$REGISTRY_HOSTNAME"/"$REPOSITORY_NAMESPACE"/"$IMAGE_NAME":latest
+
+      - name: Push the image to Github Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          echo $GITHUB_TOKEN | docker login $REGISTRY_HOSTNAME -u $GITHUB_ACTOR --password-stdin
+          docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:$VERSION
+          docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:latest
