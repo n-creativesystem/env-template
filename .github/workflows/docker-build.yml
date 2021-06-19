@@ -5,7 +5,7 @@ on:
     branches:
       - "*"
     paths-ignore:
-      - "action.yaml"
+      - "action.yml"
       - "README.md"
 
 jobs:
