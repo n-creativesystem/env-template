@@ -214,8 +214,8 @@ func TestDeploymentAndConfigMapFlag(t *testing.T) {
 		tplFile    = "tests/deployment-tpl.yml"
 		actualFile = "tests/TestDeploymentAndConfigMap2.txt"
 	)
-	_ = flag.CommandLine.Set("input", tplFile)
-	_ = flag.CommandLine.Set("output", actualFile)
+	_ = flag.CommandLine.Set("i", tplFile)
+	_ = flag.CommandLine.Set("o", actualFile)
 	os.Setenv("VERSION", "alpine")
 	err := Process()
 	if assert.NoError(t, err) {
