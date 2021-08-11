@@ -37,3 +37,11 @@ jobs:
           echo $GITHUB_TOKEN | docker login $REGISTRY_HOSTNAME -u $GITHUB_ACTOR --password-stdin
           docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:$VERSION
           docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:latest
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,9 +1,7 @@
 FROM golang:1.16-alpine as build
 
 WORKDIR /src
-COPY go.mod .
-COPY go.sum .
-COPY main.go .
+COPY go.mod go.sum *.go ./
 COPY docker-entrypoint.sh .
 
 RUN go mod download \
