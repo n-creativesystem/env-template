@@ -1,4 +1,4 @@
-name: Build and Deploy to IKS
+name: Build and Release
 
 on:
   push:
@@ -38,8 +38,13 @@ jobs:
           docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:$VERSION
           docker push $REGISTRY_HOSTNAME/$REPOSITORY_NAMESPACE/$IMAGE_NAME:latest
 
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
+        uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
           args: release --rm-dist
