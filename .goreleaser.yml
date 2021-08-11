@@ -1,6 +1,6 @@
 before:
   hooks:
-    - go mod d ownload
+    - go mod download
 builds:
   - binary: variabe-template
     main: .
