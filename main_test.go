@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"os"
 	"testing"
 
@@ -193,6 +194,28 @@ func TestDeploymentAndConfigMap2(t *testing.T) {
 	)
 	os.Setenv("INPUT_INPUT", tplFile)
 	os.Setenv("INPUT_OUTPUT", actualFile)
+	os.Setenv("VERSION", "alpine")
+	err := Process()
+	if assert.NoError(t, err) {
+		expected, err := os.ReadFile("tests/deployment.yml")
+		assert.NoError(t, err)
+		actual, err := os.ReadFile(actualFile)
+		assert.NoError(t, err)
+		assert.NotEqual(t, string(expected), string(actual))
+	}
+	os.Remove(actualFile)
+	os.Setenv("INPUT_INPUT", "")
+	os.Setenv("INPUT_OUTPUT", "")
+	os.Setenv("VERSION", "")
+}
+
+func TestDeploymentAndConfigMapFlag(t *testing.T) {
+	const (
+		tplFile    = "tests/deployment-tpl.yml"
+		actualFile = "tests/TestDeploymentAndConfigMap2.txt"
+	)
+	_ = flag.CommandLine.Set("input", tplFile)
+	_ = flag.CommandLine.Set("output", actualFile)
 	os.Setenv("VERSION", "alpine")
 	err := Process()
 	if assert.NoError(t, err) {

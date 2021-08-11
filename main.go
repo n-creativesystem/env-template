@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -60,6 +61,13 @@ func debugPrint(format string, v ...interface{}) {
 }
 
 func Process() error {
+	flag.Parse()
+	if inputVar != "" {
+		os.Setenv("INPUT_INPUT", inputVar)
+	}
+	if outputVar != "" {
+		os.Setenv("INPUT_OUTPUT", outputVar)
+	}
 	requiredField := RequiredField{}
 	if err := envconfig.Process("INPUT", &requiredField); err != nil {
 		return ErrEnvRequired
